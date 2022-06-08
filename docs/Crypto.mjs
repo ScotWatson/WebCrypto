@@ -1,26 +1,13 @@
+/*
+(c) 2022 Scot Watson  All Rights Reserved
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
 if (!('crypto' in self)) {
   throw new Error("Module can not load");
 }
 
 export class Crypto {
-  // Represents a volume root file
-  // blobFile: (Blob, optional) 
-  constructor(blobFile) {
-    this._records = [];
-  }
-  // Adds a record to the file
-  // numType: 
-  // objData: 
-  // Returns: (ArrayBuffer) The record as it will appear in the file
-  addRecord(numType, objData) {
-  }
-  // Remove unnecessary records from the file
-  purge() {
-  }
-  // Creates a Blob with the current records
-  // Returns: (Blob) Entire file containing all records
-  save() {
-  }
 }
 
 // Encrypts the given plaintext with the given key using the given iv, if provided
