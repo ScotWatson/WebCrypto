@@ -14,8 +14,18 @@ const promiseLoad = new Promise(function (resolve, reject) {
   });
 });
 
-Promise.all( [ promiseModuleCrypto, promiseLoad ] ).then(function () {
+Promise.all( [ promiseModuleCrypto, promiseLoad ] ).then(function ( [ moduleCrypto, evtLoad ]) {
   document.body.style.backgroundColor = "black";
   document.body.style.color = "white";
   document.body.innerHTML = "Loaded";
+  const inpNumRandomBytes = document.createElement("input");
+  inpNumRandomBytes.type = "text";
+  document.body.appendChild(inpNumRandomBytes);
+  const btnRandomValues = document.createElement("button");
+  btnRandomValues.innerHTML = "Get Random Values";
+  btnRandomValues.addEventListener("click", function (evt) {
+    const arrRandom = new Uint8Array(inpNumRandomBytes.value);
+    moduleCrypto.getRandomValues(arrRandom);
+  });
+  document.body.appendChild(btnRandomValues);
 });
