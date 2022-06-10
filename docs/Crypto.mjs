@@ -325,13 +325,13 @@ function deriveKey_ECDH_HMAC(baseKey, public, length) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_ECDH_AES128(baseKey, public) {
+function deriveKey_ECDH_AES128_CBC(baseKey, public) {
   const algorithm = {
     name: "ECDH",
     public: public,
   };
   const derivedKeyAlgorithm = {
-    name: "AES-CBC, AES-CTR, AES-GCM, or AES-KW",
+    name: "AES-CBC",
     length: 128,
   };
   // extractable is always set to true.  It makes no sense to set it to false.
@@ -345,13 +345,73 @@ function deriveKey_ECDH_AES128(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_ECDH_AES192(baseKey, public) {
+function deriveKey_ECDH_AES128_CTR(baseKey, public) {
   const algorithm = {
     name: "ECDH",
     public: public,
   };
   const derivedKeyAlgorithm = {
-    name: "AES-CBC, AES-CTR, AES-GCM, or AES-KW",
+    name: "AES-CTR",
+    length: 128,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
+// public: (CryptoKey) object representing the public key of the other entity.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_ECDH_AES128_GCM(baseKey, public) {
+  const algorithm = {
+    name: "ECDH",
+    public: public,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-GCM",
+    length: 128,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
+// public: (CryptoKey) object representing the public key of the other entity.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_ECDH_AES128_KW(baseKey, public) {
+  const algorithm = {
+    name: "ECDH",
+    public: public,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-KW",
+    length: 128,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
+// public: (CryptoKey) object representing the public key of the other entity.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_ECDH_AES192_CBC(baseKey, public) {
+  const algorithm = {
+    name: "ECDH",
+    public: public,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-CBC",
     length: 192,
   };
   // extractable is always set to true.  It makes no sense to set it to false.
@@ -365,13 +425,133 @@ function deriveKey_ECDH_AES192(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_ECDH_AES256(baseKey, public) {
+function deriveKey_ECDH_AES192_CTR(baseKey, public) {
   const algorithm = {
     name: "ECDH",
     public: public,
   };
   const derivedKeyAlgorithm = {
-    name: "AES-CBC, AES-CTR, AES-GCM, or AES-KW",
+    name: "AES-CTR",
+    length: 192,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
+// public: (CryptoKey) object representing the public key of the other entity.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_ECDH_AES192_GCM(baseKey, public) {
+  const algorithm = {
+    name: "ECDH",
+    public: public,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-GCM",
+    length: 192,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
+// public: (CryptoKey) object representing the public key of the other entity.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_ECDH_AES192_KW(baseKey, public) {
+  const algorithm = {
+    name: "ECDH",
+    public: public,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-KW",
+    length: 192,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
+// public: (CryptoKey) object representing the public key of the other entity.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_ECDH_AES256_CBC(baseKey, public) {
+  const algorithm = {
+    name: "ECDH",
+    public: public,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-CBC",
+    length: 256,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
+// public: (CryptoKey) object representing the public key of the other entity.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_ECDH_AES256_CTR(baseKey, public) {
+  const algorithm = {
+    name: "ECDH",
+    public: public,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-CTR",
+    length: 256,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
+// public: (CryptoKey) object representing the public key of the other entity.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_ECDH_AES256_GCM(baseKey, public) {
+  const algorithm = {
+    name: "ECDH",
+    public: public,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-GCM",
+    length: 256,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
+// public: (CryptoKey) object representing the public key of the other entity.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_ECDH_AES256_KW(baseKey, public) {
+  const algorithm = {
+    name: "ECDH",
+    public: public,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-KW",
     length: 256,
   };
   // extractable is always set to true.  It makes no sense to set it to false.
