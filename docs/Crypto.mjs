@@ -96,7 +96,7 @@ export function decrypt_AES_GCM(key, data, iv, additionalData, tagLength) {
 // length: (Number) representing the number of bits to derive. To be compatible with all browsers, the number should be a multiple of 8.
 // publicKey: (CryptoKey) the public key of the other entity
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-export function deriveBits_ECDH(algorithm, baseKey, length, publicKey) {
+export function deriveBits_ECDH(baseKey, length, publicKey) {
   const algorithm = {
     name: "ECDH",
     public: publicKey,
