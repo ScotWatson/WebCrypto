@@ -304,7 +304,7 @@ function deriveKey_ECDH_HMAC_SHA384(baseKey, public, length) {
 // public: (CryptoKey) object representing the public key of the other entity.
 // length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_ECDH_HMAC(baseKey, public, length) {
+function deriveKey_ECDH_HMAC_SHA512(baseKey, public, length) {
   const algorithm = {
     name: "ECDH",
     public: public,
@@ -563,20 +563,93 @@ function deriveKey_ECDH_AES256_KW(baseKey, public) {
 
 // derive a secret key from a master key
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function.
-// hash: (String) representing the digest algorithm to use. This may be one of:
-//         SHA-1
-//         SHA-256
-//         SHA-384
-//         SHA-512
 // salt: (BufferSource) The HKDF specification states that adding salt "adds significantly to the strength of HKDF". Ideally, the salt is a random or pseudo-random value with the same length as the output of the digest function. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // info: (BufferSource) representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer.
 // derivedKeyHash: (String) representing the name of the digest function to use. You can pass any of SHA-1, SHA-256, SHA-384, or SHA-512 here.
 // length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_HKDF_HMAC(baseKey, hash, salt, info, derivedKeyHash, length) {
+function deriveKey_HKDF_SHA1_HMAC(baseKey, salt, info, derivedKeyHash, length) {
   const algorithm = {
     name: "HKDF",
-    hash: hash,
+    hash: "SHA-1",
+    salt: salt,
+    info: info,
+  };
+  const derivedKeyAlgorithm = {
+    name: "HMAC",
+    hash: derivedKeyHash,
+    length: length,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function.
+// salt: (BufferSource) The HKDF specification states that adding salt "adds significantly to the strength of HKDF". Ideally, the salt is a random or pseudo-random value with the same length as the output of the digest function. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// info: (BufferSource) representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer.
+// derivedKeyHash: (String) representing the name of the digest function to use. You can pass any of SHA-1, SHA-256, SHA-384, or SHA-512 here.
+// length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_HKDF_SHA256_HMAC(baseKey, hash, salt, info, derivedKeyHash, length) {
+  const algorithm = {
+    name: "HKDF",
+    hash: "SHA-256",
+    salt: salt,
+    info: info,
+  };
+  const derivedKeyAlgorithm = {
+    name: "HMAC",
+    hash: derivedKeyHash,
+    length: length,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function.
+// salt: (BufferSource) The HKDF specification states that adding salt "adds significantly to the strength of HKDF". Ideally, the salt is a random or pseudo-random value with the same length as the output of the digest function. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// info: (BufferSource) representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer.
+// derivedKeyHash: (String) representing the name of the digest function to use. You can pass any of SHA-1, SHA-256, SHA-384, or SHA-512 here.
+// length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_HKDF_SHA384_HMAC(baseKey, salt, info, derivedKeyHash, length) {
+  const algorithm = {
+    name: "HKDF",
+    hash: "SHA-384",
+    salt: salt,
+    info: info,
+  };
+  const derivedKeyAlgorithm = {
+    name: "HMAC",
+    hash: derivedKeyHash,
+    length: length,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function.
+// salt: (BufferSource) The HKDF specification states that adding salt "adds significantly to the strength of HKDF". Ideally, the salt is a random or pseudo-random value with the same length as the output of the digest function. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// info: (BufferSource) representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer.
+// derivedKeyHash: (String) representing the name of the digest function to use. You can pass any of SHA-1, SHA-256, SHA-384, or SHA-512 here.
+// length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_HKDF_SHA512_HMAC(baseKey, salt, info, derivedKeyHash, length) {
+  const algorithm = {
+    name: "HKDF",
+    hash: "SHA-512",
     salt: salt,
     info: info,
   };
