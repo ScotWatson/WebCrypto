@@ -175,7 +175,7 @@ export function deriveBits_HKDF_SHA512(algorithm, baseKey, length, salt, info) {
 // salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-function deriveBits_PBKDF2_SHA1(algorithm, baseKey, length, salt, iterations) {
+export function deriveBits_PBKDF2_SHA1(algorithm, baseKey, length, salt, iterations) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-1",
@@ -191,7 +191,7 @@ function deriveBits_PBKDF2_SHA1(algorithm, baseKey, length, salt, iterations) {
 // salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-function deriveBits_PBKDF2_SHA256(algorithm, baseKey, length, salt, iterations) {
+export function deriveBits_PBKDF2_SHA256(algorithm, baseKey, length, salt, iterations) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-256",
@@ -207,7 +207,7 @@ function deriveBits_PBKDF2_SHA256(algorithm, baseKey, length, salt, iterations) 
 // salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-function deriveBits_PBKDF2_SHA384(algorithm, baseKey, length, salt, iterations) {
+export function deriveBits_PBKDF2_SHA384(algorithm, baseKey, length, salt, iterations) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-384",
@@ -223,7 +223,7 @@ function deriveBits_PBKDF2_SHA384(algorithm, baseKey, length, salt, iterations) 
 // salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-function deriveBits_PBKDF2_SHA512(algorithm, baseKey, length, salt, iterations) {
+export function deriveBits_PBKDF2_SHA512(algorithm, baseKey, length, salt, iterations) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-512",
@@ -238,7 +238,7 @@ function deriveBits_PBKDF2_SHA512(algorithm, baseKey, length, salt, iterations) 
 // public: (CryptoKey) object representing the public key of the other entity.
 // length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_ECDH_HMAC_SHA1(baseKey, public, length) {
+export function deriveKey_ECDH_HMAC_SHA1(baseKey, public, length) {
   const algorithm = {
     name: "ECDH",
     public: public,
@@ -260,7 +260,7 @@ function deriveKey_ECDH_HMAC_SHA1(baseKey, public, length) {
 // public: (CryptoKey) object representing the public key of the other entity.
 // length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_ECDH_HMAC_SHA256(baseKey, public, length) {
+export function deriveKey_ECDH_HMAC_SHA256(baseKey, public, length) {
   const algorithm = {
     name: "ECDH",
     public: public,
@@ -282,7 +282,7 @@ function deriveKey_ECDH_HMAC_SHA256(baseKey, public, length) {
 // public: (CryptoKey) object representing the public key of the other entity.
 // length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_ECDH_HMAC_SHA384(baseKey, public, length) {
+export function deriveKey_ECDH_HMAC_SHA384(baseKey, public, length) {
   const algorithm = {
     name: "ECDH",
     public: public,
@@ -304,7 +304,7 @@ function deriveKey_ECDH_HMAC_SHA384(baseKey, public, length) {
 // public: (CryptoKey) object representing the public key of the other entity.
 // length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_ECDH_HMAC_SHA512(baseKey, public, length) {
+export function deriveKey_ECDH_HMAC_SHA512(baseKey, public, length) {
   const algorithm = {
     name: "ECDH",
     public: public,
@@ -325,7 +325,7 @@ function deriveKey_ECDH_HMAC_SHA512(baseKey, public, length) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_ECDH_AES128_CBC(baseKey, public) {
+export function deriveKey_ECDH_AES128_CBC(baseKey, public) {
   const algorithm = {
     name: "ECDH",
     public: public,
@@ -345,7 +345,7 @@ function deriveKey_ECDH_AES128_CBC(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_ECDH_AES128_CTR(baseKey, public) {
+export function deriveKey_ECDH_AES128_CTR(baseKey, public) {
   const algorithm = {
     name: "ECDH",
     public: public,
@@ -365,7 +365,7 @@ function deriveKey_ECDH_AES128_CTR(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_ECDH_AES128_GCM(baseKey, public) {
+export function deriveKey_ECDH_AES128_GCM(baseKey, public) {
   const algorithm = {
     name: "ECDH",
     public: public,
@@ -385,7 +385,7 @@ function deriveKey_ECDH_AES128_GCM(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_ECDH_AES128_KW(baseKey, public) {
+export function deriveKey_ECDH_AES128_KW(baseKey, public) {
   const algorithm = {
     name: "ECDH",
     public: public,
@@ -405,7 +405,7 @@ function deriveKey_ECDH_AES128_KW(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_ECDH_AES192_CBC(baseKey, public) {
+export function deriveKey_ECDH_AES192_CBC(baseKey, public) {
   const algorithm = {
     name: "ECDH",
     public: public,
@@ -425,7 +425,7 @@ function deriveKey_ECDH_AES192_CBC(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_ECDH_AES192_CTR(baseKey, public) {
+export function deriveKey_ECDH_AES192_CTR(baseKey, public) {
   const algorithm = {
     name: "ECDH",
     public: public,
@@ -445,7 +445,7 @@ function deriveKey_ECDH_AES192_CTR(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_ECDH_AES192_GCM(baseKey, public) {
+export function deriveKey_ECDH_AES192_GCM(baseKey, public) {
   const algorithm = {
     name: "ECDH",
     public: public,
@@ -465,7 +465,7 @@ function deriveKey_ECDH_AES192_GCM(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_ECDH_AES192_KW(baseKey, public) {
+export function deriveKey_ECDH_AES192_KW(baseKey, public) {
   const algorithm = {
     name: "ECDH",
     public: public,
@@ -485,7 +485,7 @@ function deriveKey_ECDH_AES192_KW(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_ECDH_AES256_CBC(baseKey, public) {
+export function deriveKey_ECDH_AES256_CBC(baseKey, public) {
   const algorithm = {
     name: "ECDH",
     public: public,
@@ -505,7 +505,7 @@ function deriveKey_ECDH_AES256_CBC(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_ECDH_AES256_CTR(baseKey, public) {
+export function deriveKey_ECDH_AES256_CTR(baseKey, public) {
   const algorithm = {
     name: "ECDH",
     public: public,
@@ -525,7 +525,7 @@ function deriveKey_ECDH_AES256_CTR(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_ECDH_AES256_GCM(baseKey, public) {
+export function deriveKey_ECDH_AES256_GCM(baseKey, public) {
   const algorithm = {
     name: "ECDH",
     public: public,
@@ -545,7 +545,7 @@ function deriveKey_ECDH_AES256_GCM(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_ECDH_AES256_KW(baseKey, public) {
+export function deriveKey_ECDH_AES256_KW(baseKey, public) {
   const algorithm = {
     name: "ECDH",
     public: public,
@@ -568,7 +568,7 @@ function deriveKey_ECDH_AES256_KW(baseKey, public) {
 // derivedKeyHash: (String) representing the name of the digest function to use. You can pass any of SHA-1, SHA-256, SHA-384, or SHA-512 here.
 // length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_HKDF_SHA1_HMAC(baseKey, salt, info, derivedKeyHash, length) {
+export function deriveKey_HKDF_SHA1_HMAC(baseKey, salt, info, derivedKeyHash, length) {
   const algorithm = {
     name: "HKDF",
     hash: "SHA-1",
@@ -594,7 +594,7 @@ function deriveKey_HKDF_SHA1_HMAC(baseKey, salt, info, derivedKeyHash, length) {
 // derivedKeyHash: (String) representing the name of the digest function to use. You can pass any of SHA-1, SHA-256, SHA-384, or SHA-512 here.
 // length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_HKDF_SHA256_HMAC(baseKey, hash, salt, info, derivedKeyHash, length) {
+export function deriveKey_HKDF_SHA256_HMAC(baseKey, hash, salt, info, derivedKeyHash, length) {
   const algorithm = {
     name: "HKDF",
     hash: "SHA-256",
@@ -620,7 +620,7 @@ function deriveKey_HKDF_SHA256_HMAC(baseKey, hash, salt, info, derivedKeyHash, l
 // derivedKeyHash: (String) representing the name of the digest function to use. You can pass any of SHA-1, SHA-256, SHA-384, or SHA-512 here.
 // length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_HKDF_SHA384_HMAC(baseKey, salt, info, derivedKeyHash, length) {
+export function deriveKey_HKDF_SHA384_HMAC(baseKey, salt, info, derivedKeyHash, length) {
   const algorithm = {
     name: "HKDF",
     hash: "SHA-384",
@@ -646,7 +646,7 @@ function deriveKey_HKDF_SHA384_HMAC(baseKey, salt, info, derivedKeyHash, length)
 // derivedKeyHash: (String) representing the name of the digest function to use. You can pass any of SHA-1, SHA-256, SHA-384, or SHA-512 here.
 // length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_HKDF_SHA512_HMAC(baseKey, salt, info, derivedKeyHash, length) {
+export function deriveKey_HKDF_SHA512_HMAC(baseKey, salt, info, derivedKeyHash, length) {
   const algorithm = {
     name: "HKDF",
     hash: "SHA-512",
@@ -671,7 +671,7 @@ function deriveKey_HKDF_SHA512_HMAC(baseKey, salt, info, derivedKeyHash, length)
 // info: (BufferSource) representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer.
 // length: (Number) the length in bits of the key to generate. This must be one of: 128, 192, or 256.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_HKDF_SHA1_AES(baseKey, salt, info, length) {
+export function deriveKey_HKDF_SHA1_AES(baseKey, salt, info, length) {
   const algorithm = {
     name: "HKDF",
     hash: "SHA-1",
@@ -695,7 +695,7 @@ function deriveKey_HKDF_SHA1_AES(baseKey, salt, info, length) {
 // info: (BufferSource) representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer.
 // length: (Number) the length in bits of the key to generate. This must be one of: 128, 192, or 256.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_HKDF_SHA256_AES(baseKey, salt, info, length) {
+export function deriveKey_HKDF_SHA256_AES(baseKey, salt, info, length) {
   const algorithm = {
     name: "HKDF",
     hash: "SHA-256",
@@ -719,7 +719,7 @@ function deriveKey_HKDF_SHA256_AES(baseKey, salt, info, length) {
 // info: (BufferSource) representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer.
 // length: (Number) the length in bits of the key to generate. This must be one of: 128, 192, or 256.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_HKDF_SHA384_AES(baseKey, salt, info, length) {
+export function deriveKey_HKDF_SHA384_AES(baseKey, salt, info, length) {
   const algorithm = {
     name: "HKDF",
     hash: "SHA-384",
@@ -743,7 +743,7 @@ function deriveKey_HKDF_SHA384_AES(baseKey, salt, info, length) {
 // info: (BufferSource) representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer.
 // length: (Number) the length in bits of the key to generate. This must be one of: 128, 192, or 256.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_HKDF_SHA512_AES(baseKey, salt, info, length) {
+export function deriveKey_HKDF_SHA512_AES(baseKey, salt, info, length) {
   const algorithm = {
     name: "HKDF",
     hash: "SHA-512",
@@ -769,7 +769,7 @@ function deriveKey_HKDF_SHA512_AES(baseKey, salt, info, length) {
 // derivedKeyHash: (String) representing the name of the digest function to use. You can pass any of SHA-1, SHA-256, SHA-384, or SHA-512 here.
 // length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_PBKDF2_SHA1_HMAC(baseKey, salt, iterations, derivedKeyHash, length) {
+export function deriveKey_PBKDF2_SHA1_HMAC(baseKey, salt, iterations, derivedKeyHash, length) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-1",
@@ -795,7 +795,7 @@ function deriveKey_PBKDF2_SHA1_HMAC(baseKey, salt, iterations, derivedKeyHash, l
 // derivedKeyHash: (String) representing the name of the digest function to use. You can pass any of SHA-1, SHA-256, SHA-384, or SHA-512 here.
 // length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_PBKDF2_SHA256_HMAC(baseKey, salt, iterations, derivedKeyHash, length) {
+export function deriveKey_PBKDF2_SHA256_HMAC(baseKey, salt, iterations, derivedKeyHash, length) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-256",
@@ -821,7 +821,7 @@ function deriveKey_PBKDF2_SHA256_HMAC(baseKey, salt, iterations, derivedKeyHash,
 // derivedKeyHash: (String) representing the name of the digest function to use. You can pass any of SHA-1, SHA-256, SHA-384, or SHA-512 here.
 // length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_PBKDF2_SHA384_HMAC(baseKey, salt, iterations, derivedKeyHash, length) {
+export function deriveKey_PBKDF2_SHA384_HMAC(baseKey, salt, iterations, derivedKeyHash, length) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-384",
@@ -847,7 +847,7 @@ function deriveKey_PBKDF2_SHA384_HMAC(baseKey, salt, iterations, derivedKeyHash,
 // derivedKeyHash: (String) representing the name of the digest function to use. You can pass any of SHA-1, SHA-256, SHA-384, or SHA-512 here.
 // length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_PBKDF2_SHA512_HMAC(baseKey, salt, iterations, derivedKeyHash, length) {
+export function deriveKey_PBKDF2_SHA512_HMAC(baseKey, salt, iterations, derivedKeyHash, length) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-512",
@@ -873,7 +873,7 @@ function deriveKey_PBKDF2_SHA512_HMAC(baseKey, salt, iterations, derivedKeyHash,
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
 // length: (Number) the length in bits of the key to generate. This must be one of: 128, 192, or 256.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_PBKDF2_SHA1_AES(baseKey, hash, salt, iterations) {
+export function deriveKey_PBKDF2_SHA1_AES(baseKey, hash, salt, iterations) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-1",
@@ -897,7 +897,7 @@ function deriveKey_PBKDF2_SHA1_AES(baseKey, hash, salt, iterations) {
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
 // length: (Number) the length in bits of the key to generate. This must be one of: 128, 192, or 256.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_PBKDF2_SHA256_AES(baseKey, hash, salt, iterations) {
+export function deriveKey_PBKDF2_SHA256_AES(baseKey, hash, salt, iterations) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-256",
@@ -921,7 +921,7 @@ function deriveKey_PBKDF2_SHA256_AES(baseKey, hash, salt, iterations) {
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
 // length: (Number) the length in bits of the key to generate. This must be one of: 128, 192, or 256.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_PBKDF2_SHA384_AES(baseKey, hash, salt, iterations) {
+export function deriveKey_PBKDF2_SHA384_AES(baseKey, hash, salt, iterations) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-384",
@@ -945,7 +945,7 @@ function deriveKey_PBKDF2_SHA384_AES(baseKey, hash, salt, iterations) {
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
 // length: (Number) the length in bits of the key to generate. This must be one of: 128, 192, or 256.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_PBKDF2_SHA512_AES(baseKey, hash, salt, iterations) {
+export function deriveKey_PBKDF2_SHA512_AES(baseKey, hash, salt, iterations) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-512",
@@ -967,7 +967,7 @@ function deriveKey_PBKDF2_SHA512_AES(baseKey, hash, salt, iterations) {
 // Don't use this in cryptographic applications
 // data: (ArrayBuffer or ArrayBufferView) containing the data to be digested.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the digest.
-function digest_SHA_1(data) {
+export function digest_SHA_1(data) {
   const algorithm = "SHA-1";
   return self.crypto.subtle.digest(algorithm, data);
 }
@@ -975,7 +975,7 @@ function digest_SHA_1(data) {
 // hashes the message
 // data: (ArrayBuffer or ArrayBufferView) containing the data to be digested.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the digest.
-function digest_SHA_256(data) {
+export function digest_SHA_256(data) {
   const algorithm = "SHA-256";
   return self.crypto.subtle.digest(algorithm, data);
 }
@@ -983,7 +983,7 @@ function digest_SHA_256(data) {
 // hashes the message
 // data: (ArrayBuffer or ArrayBufferView) containing the data to be digested.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the digest.
-function digest_SHA_384(data) {
+export function digest_SHA_384(data) {
   const algorithm = "SHA-384";
   return self.crypto.subtle.digest(algorithm, data);
 }
@@ -991,33 +991,33 @@ function digest_SHA_384(data) {
 // hashes the message
 // data: (ArrayBuffer or ArrayBufferView) containing the data to be digested.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the digest.
-function digest_SHA_512(data) {
+export function digest_SHA_512(data) {
   const algorithm = "SHA-512";
   return self.crypto.subtle.digest(algorithm, data);
 }
 
-function encrypt() {
+export function encrypt() {
 }
 
-function exportKey() {
+export function exportKey() {
 }
 
-function generateKey() {
+export function generateKey() {
 }
 
-function importKey() {
+export function importKey() {
 }
 
-function sign() {
+export function sign() {
 }
 
-function unwrapKey() {
+export function unwrapKey() {
 }
 
-function verify() {
+export function verify() {
 }
 
-function wrapKey() {
+export function wrapKey() {
 }
 
 
