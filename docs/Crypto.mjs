@@ -175,7 +175,7 @@ export function deriveBits_HKDF_SHA512(algorithm, baseKey, length, salt, info) {
 // salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-function deriveBits_PBKDF2_SHA1(algorithm, baseKey, length) {
+function deriveBits_PBKDF2_SHA1(algorithm, baseKey, length, salt, iterations) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-1",
@@ -191,7 +191,7 @@ function deriveBits_PBKDF2_SHA1(algorithm, baseKey, length) {
 // salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-function deriveBits_PBKDF2_SHA256(algorithm, baseKey, length) {
+function deriveBits_PBKDF2_SHA256(algorithm, baseKey, length, salt, iterations) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-256",
@@ -207,7 +207,7 @@ function deriveBits_PBKDF2_SHA256(algorithm, baseKey, length) {
 // salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-function deriveBits_PBKDF2_SHA384(algorithm, baseKey, length) {
+function deriveBits_PBKDF2_SHA384(algorithm, baseKey, length, salt, iterations) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-384",
@@ -223,7 +223,7 @@ function deriveBits_PBKDF2_SHA384(algorithm, baseKey, length) {
 // salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-function deriveBits_PBKDF2_SHA512(algorithm, baseKey, length) {
+function deriveBits_PBKDF2_SHA512(algorithm, baseKey, length, salt, iterations) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-512",
@@ -236,17 +236,16 @@ function deriveBits_PBKDF2_SHA512(algorithm, baseKey, length) {
 // derive a secret key from a master key
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
-// hash: (String) representing the name of the digest function to use. You can pass any of SHA-1, SHA-256, SHA-384, or SHA-512 here.
 // length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_ECDH_HMAC(baseKey, public, hash, length) {
+function deriveKey_ECDH_HMAC_SHA1(baseKey, public, length) {
   const algorithm = {
     name: "ECDH",
     public: public,
   };
   const derivedKeyAlgorithm = {
     name: "HMAC",
-    hash: hash,
+    hash: "SHA-1",
     length: length,
   };
   // extractable is always set to true.  It makes no sense to set it to false.
@@ -259,16 +258,121 @@ function deriveKey_ECDH_HMAC(baseKey, public, hash, length) {
 // derive a secret key from a master key
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
-// length: (Number) the length in bits of the key to generate. This must be one of: 128, 192, or 256.
+// length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_ECDH_AES(baseKey, public, length) {
+function deriveKey_ECDH_HMAC_SHA256(baseKey, public, length) {
+  const algorithm = {
+    name: "ECDH",
+    public: public,
+  };
+  const derivedKeyAlgorithm = {
+    name: "HMAC",
+    hash: "SHA-256",
+    length: length,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
+// public: (CryptoKey) object representing the public key of the other entity.
+// length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_ECDH_HMAC_SHA384(baseKey, public, length) {
+  const algorithm = {
+    name: "ECDH",
+    public: public,
+  };
+  const derivedKeyAlgorithm = {
+    name: "HMAC",
+    hash: "SHA-384",
+    length: length,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
+// public: (CryptoKey) object representing the public key of the other entity.
+// length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_ECDH_HMAC(baseKey, public, length) {
+  const algorithm = {
+    name: "ECDH",
+    public: public,
+  };
+  const derivedKeyAlgorithm = {
+    name: "HMAC",
+    hash: "SHA-512",
+    length: length,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
+// public: (CryptoKey) object representing the public key of the other entity.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_ECDH_AES128(baseKey, public) {
   const algorithm = {
     name: "ECDH",
     public: public,
   };
   const derivedKeyAlgorithm = {
     name: "AES-CBC, AES-CTR, AES-GCM, or AES-KW",
-    length: length,
+    length: 128,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
+// public: (CryptoKey) object representing the public key of the other entity.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_ECDH_AES192(baseKey, public) {
+  const algorithm = {
+    name: "ECDH",
+    public: public,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-CBC, AES-CTR, AES-GCM, or AES-KW",
+    length: 192,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
+// public: (CryptoKey) object representing the public key of the other entity.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_ECDH_AES256(baseKey, public) {
+  const algorithm = {
+    name: "ECDH",
+    public: public,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-CBC, AES-CTR, AES-GCM, or AES-KW",
+    length: 256,
   };
   // extractable is always set to true.  It makes no sense to set it to false.
   const extractable = true;
