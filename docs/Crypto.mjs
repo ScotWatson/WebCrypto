@@ -92,14 +92,14 @@ export function decrypt_AES_GCM(key, data, iv, additionalData, tagLength) {
 }
 
 // derive an array of bits from a base key
-// baseKey: (CryptoKey) representing the input to the derivation algorithm. If algorithm is ECDH, this will be the ECDH private key. Otherwise it will be the initial key material for the derivation function: for example, for PBKDF2 it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // length: (Number) representing the number of bits to derive. To be compatible with all browsers, the number should be a multiple of 8.
-// public: (CryptoKey) the public key of the other entity
+// publicKey: (CryptoKey) the public key of the other entity
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-export function deriveBits_ECDH(algorithm, baseKey, length, public) {
+export function deriveBits_ECDH(algorithm, baseKey, length, publicKey) {
   const algorithm = {
     name: "ECDH",
-    public: public,
+    public: publicKey,
   };
   return self.crypto.subtle.deriveBits(algorithm, baseKey, length);
 }
@@ -110,7 +110,7 @@ export function deriveBits_ECDH(algorithm, baseKey, length, public) {
 // salt: (BufferSource) The HKDF specification states that adding salt "adds significantly to the strength of HKDF". Ideally, the salt is a random or pseudo-random value with the same length as the output of the digest function. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // info: (BufferSource) representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-export function deriveBits_HKDF_SHA1(algorithm, baseKey, length, salt, info) {
+export function deriveBits_HKDF_SHA1(baseKey, length, salt, info) {
   const algorithm = {
     name: "HKDF",
     hash: "SHA-1",
@@ -126,7 +126,7 @@ export function deriveBits_HKDF_SHA1(algorithm, baseKey, length, salt, info) {
 // salt: (BufferSource) The HKDF specification states that adding salt "adds significantly to the strength of HKDF". Ideally, the salt is a random or pseudo-random value with the same length as the output of the digest function. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // info: (BufferSource) representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-export function deriveBits_HKDF_SHA256(algorithm, baseKey, length, salt, info) {
+export function deriveBits_HKDF_SHA256(baseKey, length, salt, info) {
   const algorithm = {
     name: "HKDF",
     hash: "SHA-256",
@@ -142,8 +142,8 @@ export function deriveBits_HKDF_SHA256(algorithm, baseKey, length, salt, info) {
 // salt: (BufferSource) The HKDF specification states that adding salt "adds significantly to the strength of HKDF". Ideally, the salt is a random or pseudo-random value with the same length as the output of the digest function. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // info: (BufferSource) representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-export function deriveBits_HKDF_SHA384(algorithm, baseKey, length, salt, info) {
-  const algorithm = {  
+export function deriveBits_HKDF_SHA384(baseKey, length, salt, info) {
+  const algorithm = {
     name: "HKDF",
     hash: "SHA-384",
     salt: salt,
@@ -158,7 +158,7 @@ export function deriveBits_HKDF_SHA384(algorithm, baseKey, length, salt, info) {
 // salt: (BufferSource) The HKDF specification states that adding salt "adds significantly to the strength of HKDF". Ideally, the salt is a random or pseudo-random value with the same length as the output of the digest function. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // info: (BufferSource) representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-export function deriveBits_HKDF_SHA512(algorithm, baseKey, length, salt, info) {
+export function deriveBits_HKDF_SHA512(baseKey, length, salt, info) {
   const algorithm = {
     name: "HKDF",
     hash: "SHA-512",
@@ -238,10 +238,10 @@ export function deriveBits_PBKDF2_SHA512(algorithm, baseKey, length, salt, itera
 // public: (CryptoKey) object representing the public key of the other entity.
 // length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
 // Return: (Promise, fulfills with a CryptoKey)
-export function deriveKey_ECDH_HMAC_SHA1(baseKey, public, length) {
+export function deriveKey_ECDH_HMAC_SHA1(baseKey, publicKey, length) {
   const algorithm = {
     name: "ECDH",
-    public: public,
+    public: publicKey,
   };
   const derivedKeyAlgorithm = {
     name: "HMAC",
@@ -260,10 +260,10 @@ export function deriveKey_ECDH_HMAC_SHA1(baseKey, public, length) {
 // public: (CryptoKey) object representing the public key of the other entity.
 // length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
 // Return: (Promise, fulfills with a CryptoKey)
-export function deriveKey_ECDH_HMAC_SHA256(baseKey, public, length) {
+export function deriveKey_ECDH_HMAC_SHA256(baseKey, publicKey, length) {
   const algorithm = {
     name: "ECDH",
-    public: public,
+    public: publicKey,
   };
   const derivedKeyAlgorithm = {
     name: "HMAC",
@@ -282,10 +282,10 @@ export function deriveKey_ECDH_HMAC_SHA256(baseKey, public, length) {
 // public: (CryptoKey) object representing the public key of the other entity.
 // length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
 // Return: (Promise, fulfills with a CryptoKey)
-export function deriveKey_ECDH_HMAC_SHA384(baseKey, public, length) {
+export function deriveKey_ECDH_HMAC_SHA384(baseKey, publicKey, length) {
   const algorithm = {
     name: "ECDH",
-    public: public,
+    public: publicKey,
   };
   const derivedKeyAlgorithm = {
     name: "HMAC",
@@ -304,10 +304,10 @@ export function deriveKey_ECDH_HMAC_SHA384(baseKey, public, length) {
 // public: (CryptoKey) object representing the public key of the other entity.
 // length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
 // Return: (Promise, fulfills with a CryptoKey)
-export function deriveKey_ECDH_HMAC_SHA512(baseKey, public, length) {
+export function deriveKey_ECDH_HMAC_SHA512(baseKey, publicKey, length) {
   const algorithm = {
     name: "ECDH",
-    public: public,
+    public: publicKey,
   };
   const derivedKeyAlgorithm = {
     name: "HMAC",
@@ -325,10 +325,10 @@ export function deriveKey_ECDH_HMAC_SHA512(baseKey, public, length) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-export function deriveKey_ECDH_AES128_CBC(baseKey, public) {
+export function deriveKey_ECDH_AES128_CBC(baseKey, publicKey) {
   const algorithm = {
     name: "ECDH",
-    public: public,
+    public: publicKey,
   };
   const derivedKeyAlgorithm = {
     name: "AES-CBC",
@@ -345,10 +345,10 @@ export function deriveKey_ECDH_AES128_CBC(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-export function deriveKey_ECDH_AES128_CTR(baseKey, public) {
+export function deriveKey_ECDH_AES128_CTR(baseKey, publicKey) {
   const algorithm = {
     name: "ECDH",
-    public: public,
+    public: publicKey,
   };
   const derivedKeyAlgorithm = {
     name: "AES-CTR",
@@ -365,10 +365,10 @@ export function deriveKey_ECDH_AES128_CTR(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-export function deriveKey_ECDH_AES128_GCM(baseKey, public) {
+export function deriveKey_ECDH_AES128_GCM(baseKey, publicKey) {
   const algorithm = {
     name: "ECDH",
-    public: public,
+    public: publicKey,
   };
   const derivedKeyAlgorithm = {
     name: "AES-GCM",
@@ -385,10 +385,10 @@ export function deriveKey_ECDH_AES128_GCM(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-export function deriveKey_ECDH_AES128_KW(baseKey, public) {
+export function deriveKey_ECDH_AES128_KW(baseKey, publicKey) {
   const algorithm = {
     name: "ECDH",
-    public: public,
+    public: publicKey,
   };
   const derivedKeyAlgorithm = {
     name: "AES-KW",
@@ -405,10 +405,10 @@ export function deriveKey_ECDH_AES128_KW(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-export function deriveKey_ECDH_AES192_CBC(baseKey, public) {
+export function deriveKey_ECDH_AES192_CBC(baseKey, publicKey) {
   const algorithm = {
     name: "ECDH",
-    public: public,
+    public: publicKey,
   };
   const derivedKeyAlgorithm = {
     name: "AES-CBC",
@@ -425,10 +425,10 @@ export function deriveKey_ECDH_AES192_CBC(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-export function deriveKey_ECDH_AES192_CTR(baseKey, public) {
+export function deriveKey_ECDH_AES192_CTR(baseKey, publicKey) {
   const algorithm = {
     name: "ECDH",
-    public: public,
+    public: publicKey,
   };
   const derivedKeyAlgorithm = {
     name: "AES-CTR",
@@ -445,10 +445,10 @@ export function deriveKey_ECDH_AES192_CTR(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-export function deriveKey_ECDH_AES192_GCM(baseKey, public) {
+export function deriveKey_ECDH_AES192_GCM(baseKey, publicKey) {
   const algorithm = {
     name: "ECDH",
-    public: public,
+    public: publicKey,
   };
   const derivedKeyAlgorithm = {
     name: "AES-GCM",
@@ -465,10 +465,10 @@ export function deriveKey_ECDH_AES192_GCM(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-export function deriveKey_ECDH_AES192_KW(baseKey, public) {
+export function deriveKey_ECDH_AES192_KW(baseKey, publicKey) {
   const algorithm = {
     name: "ECDH",
-    public: public,
+    public: publicKey,
   };
   const derivedKeyAlgorithm = {
     name: "AES-KW",
@@ -485,10 +485,10 @@ export function deriveKey_ECDH_AES192_KW(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-export function deriveKey_ECDH_AES256_CBC(baseKey, public) {
+export function deriveKey_ECDH_AES256_CBC(baseKey, publicKey) {
   const algorithm = {
     name: "ECDH",
-    public: public,
+    public: publicKey,
   };
   const derivedKeyAlgorithm = {
     name: "AES-CBC",
@@ -505,10 +505,10 @@ export function deriveKey_ECDH_AES256_CBC(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-export function deriveKey_ECDH_AES256_CTR(baseKey, public) {
+export function deriveKey_ECDH_AES256_CTR(baseKey, publicKey) {
   const algorithm = {
     name: "ECDH",
-    public: public,
+    public: publicKey,
   };
   const derivedKeyAlgorithm = {
     name: "AES-CTR",
@@ -525,10 +525,10 @@ export function deriveKey_ECDH_AES256_CTR(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-export function deriveKey_ECDH_AES256_GCM(baseKey, public) {
+export function deriveKey_ECDH_AES256_GCM(baseKey, publicKey) {
   const algorithm = {
     name: "ECDH",
-    public: public,
+    public: publicKey,
   };
   const derivedKeyAlgorithm = {
     name: "AES-GCM",
@@ -545,10 +545,10 @@ export function deriveKey_ECDH_AES256_GCM(baseKey, public) {
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
 // public: (CryptoKey) object representing the public key of the other entity.
 // Return: (Promise, fulfills with a CryptoKey)
-export function deriveKey_ECDH_AES256_KW(baseKey, public) {
+export function deriveKey_ECDH_AES256_KW(baseKey, publicKey) {
   const algorithm = {
     name: "ECDH",
-    public: public,
+    public: publicKey,
   };
   const derivedKeyAlgorithm = {
     name: "AES-KW",
