@@ -142,7 +142,7 @@ export function deriveBits_HKDF_SHA256(algorithm, baseKey, length, salt, info) {
 // salt: (BufferSource) The HKDF specification states that adding salt "adds significantly to the strength of HKDF". Ideally, the salt is a random or pseudo-random value with the same length as the output of the digest function. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // info: (BufferSource) representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-export function deriveBits_HKDF(algorithm, baseKey, length, salt, info) {
+export function deriveBits_HKDF_SHA384(algorithm, baseKey, length, salt, info) {
   const algorithm = {  
     name: "HKDF",
     hash: "SHA-384",
@@ -158,8 +158,8 @@ export function deriveBits_HKDF(algorithm, baseKey, length, salt, info) {
 // salt: (BufferSource) The HKDF specification states that adding salt "adds significantly to the strength of HKDF". Ideally, the salt is a random or pseudo-random value with the same length as the output of the digest function. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // info: (BufferSource) representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-export function deriveBits_HKDF(algorithm, baseKey, length, salt, info) {
-  const algorithm = {  
+export function deriveBits_HKDF_SHA512(algorithm, baseKey, length, salt, info) {
+  const algorithm = {
     name: "HKDF",
     hash: "SHA-512",
     salt: salt,
@@ -169,21 +169,64 @@ export function deriveBits_HKDF(algorithm, baseKey, length, salt, info) {
 }
 
 // derive an array of bits from a base key
+// Warning: SHA-1 is considered vulnerable in most cryptographic applications, but is still considered safe in PBKDF2. However, it's advisable to transition away from it everywhere, so unless you need to use SHA-1, don't. Use a different digest algorithm instead.
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. If algorithm is ECDH, this will be the ECDH private key. Otherwise it will be the initial key material for the derivation function: for example, for PBKDF2 it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
 // length: (Number) representing the number of bits to derive. To be compatible with all browsers, the number should be a multiple of 8.
-// hash: (String) representing the digest algorithm to use. This may be one of:
-//        SHA-1
-//        SHA-256
-//        SHA-384
-//        SHA-512
-//    Warning: SHA-1 is considered vulnerable in most cryptographic applications, but is still considered safe in PBKDF2. However, it's advisable to transition away from it everywhere, so unless you need to use SHA-1, don't. Use a different digest algorithm instead.
 // salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-function deriveBits_PBKDF2(algorithm, baseKey, length) {
+function deriveBits_PBKDF2_SHA1(algorithm, baseKey, length) {
   const algorithm = {
     name: "PBKDF2",
-    hash: hash,
+    hash: "SHA-1",
+    salt: salt,
+    iterations: iterations,
+  };
+  return self.crypto.subtle.deriveBits(algorithm, baseKey, length);
+}
+
+// derive an array of bits from a base key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. If algorithm is ECDH, this will be the ECDH private key. Otherwise it will be the initial key material for the derivation function: for example, for PBKDF2 it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// length: (Number) representing the number of bits to derive. To be compatible with all browsers, the number should be a multiple of 8.
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
+function deriveBits_PBKDF2_SHA256(algorithm, baseKey, length) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: "SHA-256",
+    salt: salt,
+    iterations: iterations,
+  };
+  return self.crypto.subtle.deriveBits(algorithm, baseKey, length);
+}
+
+// derive an array of bits from a base key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. If algorithm is ECDH, this will be the ECDH private key. Otherwise it will be the initial key material for the derivation function: for example, for PBKDF2 it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// length: (Number) representing the number of bits to derive. To be compatible with all browsers, the number should be a multiple of 8.
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
+function deriveBits_PBKDF2_SHA384(algorithm, baseKey, length) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: "SHA-384",
+    salt: salt,
+    iterations: iterations,
+  };
+  return self.crypto.subtle.deriveBits(algorithm, baseKey, length);
+}
+
+// derive an array of bits from a base key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. If algorithm is ECDH, this will be the ECDH private key. Otherwise it will be the initial key material for the derivation function: for example, for PBKDF2 it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// length: (Number) representing the number of bits to derive. To be compatible with all browsers, the number should be a multiple of 8.
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
+function deriveBits_PBKDF2_SHA512(algorithm, baseKey, length) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: "SHA-512",
     salt: salt,
     iterations: iterations,
   };
