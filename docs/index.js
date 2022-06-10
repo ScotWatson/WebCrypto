@@ -4,8 +4,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 
 const promiseModuleCrypto = import("./Crypto.mjs")
-promiseModuleCrypto.catch(function (error) {
-  console.error(error);
+promiseModuleCrypto.catch(function (err) {
+  console.error(err);
 });
 
 const promiseLoad = new Promise(function (resolve, reject) {
