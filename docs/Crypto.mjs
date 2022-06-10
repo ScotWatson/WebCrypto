@@ -175,7 +175,7 @@ export function deriveBits_HKDF_SHA512(baseKey, length, salt, info) {
 // salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-export function deriveBits_PBKDF2_SHA1(algorithm, baseKey, length, salt, iterations) {
+export function deriveBits_PBKDF2_SHA1(baseKey, length, salt, iterations) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-1",
@@ -191,7 +191,7 @@ export function deriveBits_PBKDF2_SHA1(algorithm, baseKey, length, salt, iterati
 // salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-export function deriveBits_PBKDF2_SHA256(algorithm, baseKey, length, salt, iterations) {
+export function deriveBits_PBKDF2_SHA256(baseKey, length, salt, iterations) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-256",
@@ -207,7 +207,7 @@ export function deriveBits_PBKDF2_SHA256(algorithm, baseKey, length, salt, itera
 // salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-export function deriveBits_PBKDF2_SHA384(algorithm, baseKey, length, salt, iterations) {
+export function deriveBits_PBKDF2_SHA384(baseKey, length, salt, iterations) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-384",
@@ -223,7 +223,7 @@ export function deriveBits_PBKDF2_SHA384(algorithm, baseKey, length, salt, itera
 // salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-export function deriveBits_PBKDF2_SHA512(algorithm, baseKey, length, salt, iterations) {
+export function deriveBits_PBKDF2_SHA512(baseKey, length, salt, iterations) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-512",
