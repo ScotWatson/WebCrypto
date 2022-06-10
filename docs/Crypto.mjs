@@ -81,7 +81,7 @@ function decrypt_AES_CBC(key, data, iv) {
 //     According to the Web Crypto specification this must have one of the following values: 32, 64, 96, 104, 112, 120, or 128. The AES-GCM specification recommends that it should be 96, 104, 112, 120 or 128, although 32 or 64 bits may be acceptable in some applications: Appendix C of the specification provides additional guidance here., defaults to 128 if it is not specified.
 // To use AES-GCM, pass an AesGcmParams object.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the plaintext.
-function decrypt_AES_GCM(key, data) {
+function decrypt_AES_GCM(key, data, iv, additionalData, tagLength) {
   const algorithm = {
     name: "AES-GCM",
     iv: iv,
@@ -94,81 +94,256 @@ function decrypt_AES_GCM(key, data) {
 // derive an array of bits from a base key
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. If algorithm is ECDH, this will be the ECDH private key. Otherwise it will be the initial key material for the derivation function: for example, for PBKDF2 it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
 // length: (Number) representing the number of bits to derive. To be compatible with all browsers, the number should be a multiple of 8.
+// public: (CryptoKey) the public key of the other entity
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-function deriveBits(algorithm, baseKey, length) {
-  {  
+function deriveBits_ECDH(algorithm, baseKey, length, public) {
+  const algorithm = {
     name: "ECDH",
-    public: (CryptoKey) the public key of the other entity,
-  }
+    public: public,
+  };
+  return self.crypto.subtle.deriveBits(algorithm, baseKey, length);
 }
 
 // derive an array of bits from a base key
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. If algorithm is ECDH, this will be the ECDH private key. Otherwise it will be the initial key material for the derivation function: for example, for PBKDF2 it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
 // length: (Number) representing the number of bits to derive. To be compatible with all browsers, the number should be a multiple of 8.
+// hash: (String) representing the digest algorithm to use. This may be one of:
+//        SHA-1
+//        SHA-256
+//        SHA-384
+//        SHA-512
+// salt: (BufferSource) The HKDF specification states that adding salt "adds significantly to the strength of HKDF". Ideally, the salt is a random or pseudo-random value with the same length as the output of the digest function. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// info: (BufferSource) representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-function deriveBits(algorithm, baseKey, length) {
-  {  
+function deriveBits_HKDF(algorithm, baseKey, length) {
+  const algorithm = {  
     name: "HKDF",
-    hash: (String) representing the digest algorithm to use. This may be one of:
-    //        SHA-1
-    //        SHA-256
-    //        SHA-384
-    //        SHA-512
-    salt: (BufferSource) The HKDF specification states that adding salt "adds significantly to the strength of HKDF". Ideally, the salt is a random or pseudo-random value with the same length as the output of the digest function. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
-    info: (BufferSource) representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer.
-  }
+    hash: hash,
+    salt: salt,
+    info: info,
+  };
+  return self.crypto.subtle.deriveBits(algorithm, baseKey, length);
 }
 
 // derive an array of bits from a base key
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. If algorithm is ECDH, this will be the ECDH private key. Otherwise it will be the initial key material for the derivation function: for example, for PBKDF2 it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
 // length: (Number) representing the number of bits to derive. To be compatible with all browsers, the number should be a multiple of 8.
+// hash: (String) representing the digest algorithm to use. This may be one of:
+//        SHA-1
+//        SHA-256
+//        SHA-384
+//        SHA-512
+//    Warning: SHA-1 is considered vulnerable in most cryptographic applications, but is still considered safe in PBKDF2. However, it's advisable to transition away from it everywhere, so unless you need to use SHA-1, don't. Use a different digest algorithm instead.
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the derived bits
-function deriveBits(algorithm, baseKey, length) {
-  {
+function deriveBits_PBKDF2(algorithm, baseKey, length) {
+  const algorithm = {
     name: "PBKDF2",
-    hash: (String) representing the digest algorithm to use. This may be one of:
-    //        SHA-1
-    //        SHA-256
-    //        SHA-384
-    //        SHA-512
-    //    Warning: SHA-1 is considered vulnerable in most cryptographic applications, but is still considered safe in PBKDF2. However, it's advisable to transition away from it everywhere, so unless you need to use SHA-1, don't. Use a different digest algorithm instead.
-    salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
-    iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
-  }
+    hash: hash,
+    salt: salt,
+    iterations: iterations,
+  };
+  return self.crypto.subtle.deriveBits(algorithm, baseKey, length);
 }
 
 // derive a secret key from a master key
-// algorithm:
-// baseKey:
-// derivedKeyAlgorithm:
-// extractable:
-// keyUsages:
-function deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages) {
-
-baseKey: (CryptoKey) representing the input to the derivation algorithm. If algorithm is ECDH, then this will be the ECDH private key. Otherwise it will be the initial key material for the derivation function: for example, for PBKDF2 it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
-derivedKeyAlgorithm:
-
-    An object defining the algorithm the derived key will be used for.
-
-        For HMAC: pass an HmacKeyGenParams object.
-        For AES-CTR, AES-CBC, AES-GCM, or AES-KW: pass an AesKeyGenParams object.
-
-extractable: (Boolean) value indicating whether it will be possible to export the key using SubtleCrypto.exportKey() or SubtleCrypto.wrapKey().
-keyUsages: (Array) indicating what can be done with the derived key. Note that the key usages must be allowed by the algorithm set in derivedKeyAlgorithm. Possible values of the array are:
-        encrypt: The key may be used to encrypt messages.
-        decrypt: The key may be used to decrypt messages.
-        sign: The key may be used to sign messages.
-        verify: The key may be used to verify signatures.
-        deriveKey: The key may be used in deriving a new key.
-        deriveBits: The key may be used in deriving bits.
-        wrapKey: The key may be used to wrap a key.
-        unwrapKey: The key may be used to unwrap a key.
-
-
-
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
+// public: (CryptoKey) object representing the public key of the other entity.
+// hash: (String) representing the name of the digest function to use. You can pass any of SHA-1, SHA-256, SHA-384, or SHA-512 here.
+// length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_ECDH_HMAC(baseKey, public, hash, length) {
+  const algorithm = {
+    name: "ECDH",
+    public: public,
+  };
+  const derivedKeyAlgorithm = {
+    name: "HMAC",
+    hash: hash,
+    length: length,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
 }
 
-function digest() {
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. This will be the ECDH private key.
+// public: (CryptoKey) object representing the public key of the other entity.
+// length: (Number) the length in bits of the key to generate. This must be one of: 128, 192, or 256.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_ECDH_AES(baseKey, public, length) {
+  const algorithm = {
+    name: "ECDH",
+    public: public,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-CBC, AES-CTR, AES-GCM, or AES-KW",
+    length: length,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function.
+// hash: (String) representing the digest algorithm to use. This may be one of:
+//         SHA-1
+//         SHA-256
+//         SHA-384
+//         SHA-512
+// salt: (BufferSource) The HKDF specification states that adding salt "adds significantly to the strength of HKDF". Ideally, the salt is a random or pseudo-random value with the same length as the output of the digest function. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// info: (BufferSource) representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer.
+// derivedKeyHash: (String) representing the name of the digest function to use. You can pass any of SHA-1, SHA-256, SHA-384, or SHA-512 here.
+// length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_HKDF_HMAC(baseKey, hash, salt, info, derivedKeyHash, length) {
+  const algorithm = {
+    name: "HKDF",
+    hash: hash,
+    salt: salt,
+    info: info,
+  };
+  const derivedKeyAlgorithm = {
+    name: "HMAC",
+    hash: derivedKeyHash,
+    length: length,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function.
+// hash: (String) representing the digest algorithm to use. This may be one of:
+//         SHA-1
+//         SHA-256
+//         SHA-384
+//         SHA-512
+// salt: (BufferSource) The HKDF specification states that adding salt "adds significantly to the strength of HKDF". Ideally, the salt is a random or pseudo-random value with the same length as the output of the digest function. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// info: (BufferSource) representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer.
+// length: (Number) the length in bits of the key to generate. This must be one of: 128, 192, or 256.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_HKDF_AES(baseKey, hash, salt, info, length) {
+  const algorithm = {
+    name: "HKDF",
+    hash: hash,
+    salt: salt,
+    info: info,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-CBC, AES-CTR, AES-GCM, or AES-KW",
+    length: length,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// hash: (String) representing the digest algorithm to use. This may be one of:
+//         SHA-1
+//         SHA-256
+//         SHA-384
+//         SHA-512
+//     Warning: SHA-1 is considered vulnerable in most cryptographic applications, but is still considered safe in PBKDF2. However, it's advisable to transition away from it everywhere, so unless you need to use SHA-1, don't. Use a different digest algorithm instead.
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// derivedKeyHash: (String) representing the name of the digest function to use. You can pass any of SHA-1, SHA-256, SHA-384, or SHA-512 here.
+// length: (Number, Optional) the length in bits of the key. If this is omitted, the length of the key is equal to the block size of the hash function you have chosen. Unless you have a good reason to use a different length, omit this property and use the default.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_PBKDF2_HMAC(baseKey, hash, salt, iterations, derivedKeyHash, length) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: hash,
+    salt: salt,
+    iterations: iterations,
+  };
+  const derivedKeyAlgorithm = {
+    name: "HMAC",
+    hash: derivedKeyHash,
+    length: length,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// hash: (String) representing the digest algorithm to use. This may be one of:
+//         SHA-1
+//         SHA-256
+//         SHA-384
+//         SHA-512
+//     Warning: SHA-1 is considered vulnerable in most cryptographic applications, but is still considered safe in PBKDF2. However, it's advisable to transition away from it everywhere, so unless you need to use SHA-1, don't. Use a different digest algorithm instead.
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// length: (Number) the length in bits of the key to generate. This must be one of: 128, 192, or 256.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_PBKDF2_AES(baseKey, hash, salt, iterations) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: hash,
+    salt: salt,
+    iterations: iterations,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-CBC, AES-CTR, AES-GCM, or AES-KW",
+    length: length,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// hashes the message
+// Don't use this in cryptographic applications
+// data: (ArrayBuffer or ArrayBufferView) containing the data to be digested.
+// Return: (Promise that fulfills with an ArrayBuffer) containing the digest.
+function digest_SHA_1(data) {
+  const algorithm = "SHA-1";
+  return self.crypto.subtle.digest(algorithm, data);
+}
+
+// hashes the message
+// data: (ArrayBuffer or ArrayBufferView) containing the data to be digested.
+// Return: (Promise that fulfills with an ArrayBuffer) containing the digest.
+function digest_SHA_256(data) {
+  const algorithm = "SHA-256";
+  return self.crypto.subtle.digest(algorithm, data);
+}
+
+// hashes the message
+// data: (ArrayBuffer or ArrayBufferView) containing the data to be digested.
+// Return: (Promise that fulfills with an ArrayBuffer) containing the digest.
+function digest_SHA_384(data) {
+  const algorithm = "SHA-384";
+  return self.crypto.subtle.digest(algorithm, data);
+}
+
+// hashes the message
+// data: (ArrayBuffer or ArrayBufferView) containing the data to be digested.
+// Return: (Promise that fulfills with an ArrayBuffer) containing the digest.
+function digest_SHA_512(data) {
+  const algorithm = "SHA-512";
+  return self.crypto.subtle.digest(algorithm, data);
 }
 
 function encrypt() {
