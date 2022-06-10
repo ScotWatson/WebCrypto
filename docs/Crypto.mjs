@@ -667,19 +667,86 @@ function deriveKey_HKDF_SHA512_HMAC(baseKey, salt, info, derivedKeyHash, length)
 
 // derive a secret key from a master key
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function.
-// hash: (String) representing the digest algorithm to use. This may be one of:
-//         SHA-1
-//         SHA-256
-//         SHA-384
-//         SHA-512
 // salt: (BufferSource) The HKDF specification states that adding salt "adds significantly to the strength of HKDF". Ideally, the salt is a random or pseudo-random value with the same length as the output of the digest function. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // info: (BufferSource) representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer.
 // length: (Number) the length in bits of the key to generate. This must be one of: 128, 192, or 256.
 // Return: (Promise, fulfills with a CryptoKey)
-function deriveKey_HKDF_AES(baseKey, hash, salt, info, length) {
+function deriveKey_HKDF_SHA1_AES(baseKey, salt, info, length) {
   const algorithm = {
     name: "HKDF",
-    hash: hash,
+    hash: "SHA-1",
+    salt: salt,
+    info: info,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-CBC, AES-CTR, AES-GCM, or AES-KW",
+    length: length,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function.
+// salt: (BufferSource) The HKDF specification states that adding salt "adds significantly to the strength of HKDF". Ideally, the salt is a random or pseudo-random value with the same length as the output of the digest function. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// info: (BufferSource) representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer.
+// length: (Number) the length in bits of the key to generate. This must be one of: 128, 192, or 256.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_HKDF_SHA256_AES(baseKey, salt, info, length) {
+  const algorithm = {
+    name: "HKDF",
+    hash: "SHA-256",
+    salt: salt,
+    info: info,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-CBC, AES-CTR, AES-GCM, or AES-KW",
+    length: length,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function.
+// salt: (BufferSource) The HKDF specification states that adding salt "adds significantly to the strength of HKDF". Ideally, the salt is a random or pseudo-random value with the same length as the output of the digest function. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// info: (BufferSource) representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer.
+// length: (Number) the length in bits of the key to generate. This must be one of: 128, 192, or 256.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_HKDF_AES(baseKey, salt, info, length) {
+  const algorithm = {
+    name: "HKDF",
+    hash: "SHA-384",
+    salt: salt,
+    info: info,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-CBC, AES-CTR, AES-GCM, or AES-KW",
+    length: length,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function.
+// salt: (BufferSource) The HKDF specification states that adding salt "adds significantly to the strength of HKDF". Ideally, the salt is a random or pseudo-random value with the same length as the output of the digest function. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// info: (BufferSource) representing application-specific contextual information. This is used to bind the derived key to an application or context, and enables you to derive different keys for different contexts while using the same input key material. It's important that this should be independent of the input key material itself. This property is required but may be an empty buffer.
+// length: (Number) the length in bits of the key to generate. This must be one of: 128, 192, or 256.
+// Return: (Promise, fulfills with a CryptoKey)
+function deriveKey_HKDF_AES(baseKey, salt, info, length) {
+  const algorithm = {
+    name: "HKDF",
+    hash: "SHA-512",
     salt: salt,
     info: info,
   };
