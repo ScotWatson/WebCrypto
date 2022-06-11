@@ -2442,9 +2442,8 @@ export function deriveKey_PBKDF2_SHA256_AES256_KW(baseKey, hash, salt, iteration
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
 // salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
-// length: (Number) the length in bits of the key to generate. This must be one of: 128, 192, or 256.
 // Return: (Promise, fulfills with a CryptoKey)
-export function deriveKey_PBKDF2_SHA384_AES128(baseKey, hash, salt, iterations) {
+export function deriveKey_PBKDF2_SHA384_AES128_CBC(baseKey, hash, salt, iterations) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-384",
@@ -2452,7 +2451,7 @@ export function deriveKey_PBKDF2_SHA384_AES128(baseKey, hash, salt, iterations) 
     iterations: iterations,
   };
   const derivedKeyAlgorithm = {
-    name: "AES-CBC, AES-CTR, AES-GCM, or AES-KW",
+    name: "AES-CBC",
     length: 128,
   };
   // extractable is always set to true.  It makes no sense to set it to false.
@@ -2466,9 +2465,8 @@ export function deriveKey_PBKDF2_SHA384_AES128(baseKey, hash, salt, iterations) 
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
 // salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
-// length: (Number) the length in bits of the key to generate. This must be one of: 128, 192, or 256.
 // Return: (Promise, fulfills with a CryptoKey)
-export function deriveKey_PBKDF2_SHA384_AES192(baseKey, hash, salt, iterations) {
+export function deriveKey_PBKDF2_SHA384_AES128_CTR(baseKey, hash, salt, iterations) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-384",
@@ -2476,7 +2474,76 @@ export function deriveKey_PBKDF2_SHA384_AES192(baseKey, hash, salt, iterations) 
     iterations: iterations,
   };
   const derivedKeyAlgorithm = {
-    name: "AES-CBC, AES-CTR, AES-GCM, or AES-KW",
+    name: "AES-CTR",
+    length: 128,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// Return: (Promise, fulfills with a CryptoKey)
+export function deriveKey_PBKDF2_SHA384_AES128_GCM(baseKey, hash, salt, iterations) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: "SHA-384",
+    salt: salt,
+    iterations: iterations,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-GCM",
+    length: 128,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// Return: (Promise, fulfills with a CryptoKey)
+export function deriveKey_PBKDF2_SHA384_AES128_KW(baseKey, hash, salt, iterations) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: "SHA-384",
+    salt: salt,
+    iterations: iterations,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-KW",
+    length: 128,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// Return: (Promise, fulfills with a CryptoKey)
+export function deriveKey_PBKDF2_SHA384_AES192_CBC(baseKey, hash, salt, iterations) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: "SHA-384",
+    salt: salt,
+    iterations: iterations,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-CBC",
     length: 192,
   };
   // extractable is always set to true.  It makes no sense to set it to false.
@@ -2490,9 +2557,8 @@ export function deriveKey_PBKDF2_SHA384_AES192(baseKey, hash, salt, iterations) 
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
 // salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
-// length: (Number) the length in bits of the key to generate. This must be one of: 128, 192, or 256.
 // Return: (Promise, fulfills with a CryptoKey)
-export function deriveKey_PBKDF2_SHA384_AES256(baseKey, hash, salt, iterations) {
+export function deriveKey_PBKDF2_SHA384_AES192_CTR(baseKey, hash, salt, iterations) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-384",
@@ -2500,7 +2566,76 @@ export function deriveKey_PBKDF2_SHA384_AES256(baseKey, hash, salt, iterations) 
     iterations: iterations,
   };
   const derivedKeyAlgorithm = {
-    name: "AES-CBC, AES-CTR, AES-GCM, or AES-KW",
+    name: "AES-CTR",
+    length: 192,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// Return: (Promise, fulfills with a CryptoKey)
+export function deriveKey_PBKDF2_SHA384_AES192_GCM(baseKey, hash, salt, iterations) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: "SHA-384",
+    salt: salt,
+    iterations: iterations,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-GCM",
+    length: 192,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// Return: (Promise, fulfills with a CryptoKey)
+export function deriveKey_PBKDF2_SHA384_AES192_KW(baseKey, hash, salt, iterations) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: "SHA-384",
+    salt: salt,
+    iterations: iterations,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-KW",
+    length: 192,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// Return: (Promise, fulfills with a CryptoKey)
+export function deriveKey_PBKDF2_SHA384_AES256_CBC(baseKey, hash, salt, iterations) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: "SHA-384",
+    salt: salt,
+    iterations: iterations,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-CBC",
     length: 256,
   };
   // extractable is always set to true.  It makes no sense to set it to false.
@@ -2514,9 +2649,77 @@ export function deriveKey_PBKDF2_SHA384_AES256(baseKey, hash, salt, iterations) 
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
 // salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
-// length: (Number) the length in bits of the key to generate. This must be one of: 128, 192, or 256.
 // Return: (Promise, fulfills with a CryptoKey)
-export function deriveKey_PBKDF2_SHA512_AES128(baseKey, hash, salt, iterations) {
+export function deriveKey_PBKDF2_SHA384_AES256_CTR(baseKey, hash, salt, iterations) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: "SHA-384",
+    salt: salt,
+    iterations: iterations,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-CTR",
+    length: 256,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// Return: (Promise, fulfills with a CryptoKey)
+export function deriveKey_PBKDF2_SHA384_AES256_GCM(baseKey, hash, salt, iterations) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: "SHA-384",
+    salt: salt,
+    iterations: iterations,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-GCM",
+    length: 256,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// Return: (Promise, fulfills with a CryptoKey)
+export function deriveKey_PBKDF2_SHA384_AES256_KW(baseKey, hash, salt, iterations) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: "SHA-384",
+    salt: salt,
+    iterations: iterations,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-KW",
+    length: 256,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// Return: (Promise, fulfills with a CryptoKey)
+export function deriveKey_PBKDF2_SHA512_AES128_CBC(baseKey, hash, salt, iterations) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-512",
@@ -2524,7 +2727,7 @@ export function deriveKey_PBKDF2_SHA512_AES128(baseKey, hash, salt, iterations) 
     iterations: iterations,
   };
   const derivedKeyAlgorithm = {
-    name: "AES-CBC, AES-CTR, AES-GCM, or AES-KW",
+    name: "AES-CBC",
     length: 128,
   };
   // extractable is always set to true.  It makes no sense to set it to false.
@@ -2538,9 +2741,8 @@ export function deriveKey_PBKDF2_SHA512_AES128(baseKey, hash, salt, iterations) 
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
 // salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
-// length: (Number) the length in bits of the key to generate. This must be one of: 128, 192, or 256.
 // Return: (Promise, fulfills with a CryptoKey)
-export function deriveKey_PBKDF2_SHA512_AES192(baseKey, hash, salt, iterations) {
+export function deriveKey_PBKDF2_SHA512_AES128_CTR(baseKey, hash, salt, iterations) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-512",
@@ -2548,7 +2750,76 @@ export function deriveKey_PBKDF2_SHA512_AES192(baseKey, hash, salt, iterations) 
     iterations: iterations,
   };
   const derivedKeyAlgorithm = {
-    name: "AES-CBC, AES-CTR, AES-GCM, or AES-KW",
+    name: "AES-CTR",
+    length: 128,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// Return: (Promise, fulfills with a CryptoKey)
+export function deriveKey_PBKDF2_SHA512_AES128_GCM(baseKey, hash, salt, iterations) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: "SHA-512",
+    salt: salt,
+    iterations: iterations,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-GCM",
+    length: 128,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// Return: (Promise, fulfills with a CryptoKey)
+export function deriveKey_PBKDF2_SHA512_AES128_KW(baseKey, hash, salt, iterations) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: "SHA-512",
+    salt: salt,
+    iterations: iterations,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-KW",
+    length: 128,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// Return: (Promise, fulfills with a CryptoKey)
+export function deriveKey_PBKDF2_SHA512_AES192_CBC(baseKey, salt, iterations) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: "SHA-512",
+    salt: salt,
+    iterations: iterations,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-CBC",
     length: 192,
   };
   // extractable is always set to true.  It makes no sense to set it to false.
@@ -2562,9 +2833,8 @@ export function deriveKey_PBKDF2_SHA512_AES192(baseKey, hash, salt, iterations) 
 // baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
 // salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
 // iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
-// length: (Number) the length in bits of the key to generate. This must be one of: 128, 192, or 256.
 // Return: (Promise, fulfills with a CryptoKey)
-export function deriveKey_PBKDF2_SHA512_AES256(baseKey, hash, salt, iterations) {
+export function deriveKey_PBKDF2_SHA512_AES192_CTR(baseKey, salt, iterations) {
   const algorithm = {
     name: "PBKDF2",
     hash: "SHA-512",
@@ -2572,7 +2842,145 @@ export function deriveKey_PBKDF2_SHA512_AES256(baseKey, hash, salt, iterations) 
     iterations: iterations,
   };
   const derivedKeyAlgorithm = {
-    name: "AES-CBC, AES-CTR, AES-GCM, or AES-KW",
+    name: "AES-CTR",
+    length: 192,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// Return: (Promise, fulfills with a CryptoKey)
+export function deriveKey_PBKDF2_SHA512_AES192_GCM(baseKey, salt, iterations) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: "SHA-512",
+    salt: salt,
+    iterations: iterations,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-GCM",
+    length: 192,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// Return: (Promise, fulfills with a CryptoKey)
+export function deriveKey_PBKDF2_SHA512_AES192_KW(baseKey, salt, iterations) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: "SHA-512",
+    salt: salt,
+    iterations: iterations,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-KW",
+    length: 192,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// Return: (Promise, fulfills with a CryptoKey)
+export function deriveKey_PBKDF2_SHA512_AES256_CBC(baseKey, hash, salt, iterations) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: "SHA-512",
+    salt: salt,
+    iterations: iterations,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-CBC",
+    length: 256,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// Return: (Promise, fulfills with a CryptoKey)
+export function deriveKey_PBKDF2_SHA512_AES256_CTR(baseKey, hash, salt, iterations) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: "SHA-512",
+    salt: salt,
+    iterations: iterations,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-CTR",
+    length: 256,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// Return: (Promise, fulfills with a CryptoKey)
+export function deriveKey_PBKDF2_SHA512_AES256_GCM(baseKey, hash, salt, iterations) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: "SHA-512",
+    salt: salt,
+    iterations: iterations,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-GCM",
+    length: 256,
+  };
+  // extractable is always set to true.  It makes no sense to set it to false.
+  const extractable = true;
+  // keyUsages is always set to the most possible uses.  It makes no sense to make it anything else.
+  const keyUsages = [ "encrypt", "decrypt", "sign", "verify", "deriveKey", "deriveBits", "wrapKey", "unwrapKey" ];
+  return self.crypto.subtle.deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+}
+
+// derive a secret key from a master key
+// baseKey: (CryptoKey) representing the input to the derivation algorithm. It will be the initial key material for the derivation function; it might be a password, imported as a CryptoKey using SubtleCrypto.importKey().
+// salt: (BufferSource) This should be a random or pseudo-random value of at least 16 bytes. Unlike the input key material passed into deriveKey(), salt does not need to be kept secret.
+// iterations: (Number) representing the number of times the hash function will be executed in deriveKey(). This determines how computationally expensive (that is, slow) the deriveKey() operation will be. In this context, slow is good, since it makes it more expensive for an attacker to run a dictionary attack against the keys. The general guidance here is to use as many iterations as possible, subject to keeping an acceptable level of performance for your application.
+// Return: (Promise, fulfills with a CryptoKey)
+export function deriveKey_PBKDF2_SHA512_AES256_KW(baseKey, hash, salt, iterations) {
+  const algorithm = {
+    name: "PBKDF2",
+    hash: "SHA-512",
+    salt: salt,
+    iterations: iterations,
+  };
+  const derivedKeyAlgorithm = {
+    name: "AES-KW",
     length: 256,
   };
   // extractable is always set to true.  It makes no sense to set it to false.
