@@ -3653,7 +3653,7 @@ export function encrypt_AES_CTR(key, data, counter, length) {
 // data: (BufferSource)
 // iv: (BufferSource) The initialization vector. Must be 16 bytes, unpredictable, and preferably cryptographically random. However, it need not be secret (for example, it may be transmitted unencrypted along with the ciphertext)
 // Return: (Promise that fulfills with an ArrayBuffer) containing the plaintext.
-export function decrypt_AES_CBC(key, data, iv) {
+export function encrypt_AES_CBC(key, data, iv) {
   const algorithm = {
     name: "AES-CBC",
     iv: iv,
@@ -3671,7 +3671,7 @@ export function decrypt_AES_CBC(key, data, iv) {
 // tagLength: (Optional) (Number) This determines the size in bits of the authentication tag generated in the encryption operation and used for authentication in the corresponding decryption.
 //     According to the Web Crypto specification this must have one of the following values: 32, 64, 96, 104, 112, 120, or 128. The AES-GCM specification recommends that it should be 96, 104, 112, 120 or 128, although 32 or 64 bits may be acceptable in some applications: Appendix C of the specification provides additional guidance here., defaults to 128 if it is not specified.
 // Return: (Promise that fulfills with an ArrayBuffer) containing the plaintext.
-export function decrypt_AES_GCM(key, data, iv, additionalData, tagLength) {
+export function encrypt_AES_GCM(key, data, iv, additionalData, tagLength) {
   const algorithm = {
     name: "AES-GCM",
     iv: iv,
