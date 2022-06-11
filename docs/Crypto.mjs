@@ -3681,7 +3681,36 @@ export function encrypt_AES_GCM(key, data, iv, additionalData, tagLength) {
   return self.crypto.subtle.encrypt(algorithm, key, data);
 }
 
-export function exportKey() {
+// Gives the key in an external, portable format
+// key: (CryptoKey) key to export
+// Return: (Promise, fulfills with ArrayBuffer) Containing the key.
+export function exportKeyRaw(key) {
+  const format = "raw";
+  return self.crypto.subtle.exportKey(format, key);
+}
+
+// Gives the key in an external, portable format
+// key: (CryptoKey) key to export
+// Return: (Promise, fulfills with ArrayBuffer) Containing the key.
+export function exportKeyPkcs8(key) {
+  const format = "pkcs8";
+  return self.crypto.subtle.exportKey(format, key);
+}
+
+// Gives the key in an external, portable format
+// key: (CryptoKey) key to export
+// Return: (Promise, fulfills with ArrayBuffer) Containing the key.
+export function exportKeySpki(key) {
+  const format = "spki";
+  return self.crypto.subtle.exportKey(format, key);
+}
+
+// Gives the key in an external, portable format
+// key: (CryptoKey) key to export
+// Return: (Promise, fulfills with Object) JSON object containing the key
+export function exportKeyJwk(format, key) {
+  const format = "jwk";
+  return self.crypto.subtle.exportKey(format, key);
 }
 
 export function generateKey() {
