@@ -3742,10 +3742,13 @@ export function wrapKey() {
 // Returns : (Promise, resolving to Object, containing members iv and ciphertext)
 //   iv: (Uint8Array) initialization vector
 //   ciphertext: (ArrayBuffer) encrypted contents
-export function encrypt_AES256_CBC(plaintext, key, iv) {
+export function encrypt_AES256_CBC( { plaintext, key, iv } ) {
   let retVal = {};
   if (!iv) {
-    retVal.iv = new Uint8Array(randomData(16));
+    retVal.iv = new Uint8Array(16);
+    getRandomValues(retVal.iv);
+  } else {
+    retVal.iv = iv;
   }
   return window.crypto.subtle.importKey("raw", key, "AES-CBC", false, [ "encrypt", "decrypt" ]).then(function (myImportedKey) {
     let myAesCbcParams = {name: "AES-CBC", iv: retVal.iv};
@@ -3764,7 +3767,7 @@ export function encrypt_AES256_CBC(plaintext, key, iv) {
 // key: (Uint8Array) key to decrypt the contents
 // iv: (Uint8Array) initialization vector
 // Returns : (Promise, resolving to ArrayBuffer) plain (unencrypted) contents
-export function decrypt_AES256_CBC(ciphertext, key, iv) {
+export function decrypt_AES256_CBC( { ciphertext, key, iv } ) {
   return window.crypto.subtle.importKey("raw", key, "AES-CBC", false, [ "encrypt", "decrypt" ]).then(function (myImportedKey) {
     let myAesCbcParams = {name: "AES-CBC", iv: iv};
     return window.crypto.subtle.decrypt(myAesCbcParams, myImportedKey, ciphertext);
