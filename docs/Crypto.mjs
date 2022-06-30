@@ -3708,7 +3708,7 @@ export function exportKeySpki(key) {
 // Gives the key in an external, portable format
 // key: (CryptoKey) key to export
 // Return: (Promise, fulfills with Object) JSON object containing the key
-export function exportKeyJwk(format, key) {
+export function exportKeyJwk(key) {
   const format = "jwk";
   return self.crypto.subtle.exportKey(format, key);
 }
