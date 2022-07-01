@@ -10,6 +10,17 @@ if (!('crypto' in self)) {
 export class Crypto {
 }
 
+// Fills a buffer with random values
+// outputArray: a TypedArray that will be filled with random values
+// Returns: undefined
+export function getRandomArray(outputArray) {
+  const maxLength = 65536 / typedArray.BYTES_PER_ELEMENT;
+  const numLoops = typedArray.length / maxLength;
+  for (let i = 0; i < numLoops; ++i) {
+    window.crypto.getRandomValues(typedArray.subarray(maxLength * i, maxLength * (i + 1)));
+  }
+}
+
 // Fills the passed TypedArray with cryptographically sound random values
 // typedArray: (TypedArray, but not Float32Array nor Float64Array) All elements in the array will be overwritten with random numbers
 // Return: the typedArray (not a copy)
