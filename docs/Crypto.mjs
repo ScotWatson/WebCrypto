@@ -14,10 +14,10 @@ export class Crypto {
 // outputArray: a TypedArray that will be filled with random values
 // Returns: undefined
 export function getRandomArray(outputArray) {
-  const maxLength = 65536 / typedArray.BYTES_PER_ELEMENT;
-  const numLoops = typedArray.length / maxLength;
+  const maxLength = 65536 / outputArray.BYTES_PER_ELEMENT;
+  const numLoops = outputArray.length / maxLength;
   for (let i = 0; i < numLoops; ++i) {
-    window.crypto.getRandomValues(typedArray.subarray(maxLength * i, maxLength * (i + 1)));
+    window.crypto.getRandomValues(outputArray.subarray(maxLength * i, maxLength * (i + 1)));
   }
 }
 
